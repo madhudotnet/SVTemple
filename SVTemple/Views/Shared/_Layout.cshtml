@@ -40,6 +40,32 @@
 </head>
 <!-- Header -->
 <body>
+    <div id="paypal-button"> </div>
+    <script src="https://www.paypalobjects.com/api/checkout.js"></script>
+    <script>
+        paypal.Button.render({
+            env: 'sandbox',
+            client: {
+                sandbox: 'ASQdAGjX0N9gpKvck2FKrZ8sReBnwg0UoO9QsIHUTorD5TmMq0UyjVnMp7YiH-NeMGPnhE8BeI5foUEk'
+            },
+            payment: function (data, actions) {
+                return actions.payment.create({
+                    transactions: [{
+                        amount: {
+                            total: '0.01',
+                            currency: 'USD'
+                        }
+                    }]
+                });
+            },
+            onAuthorize: function (data, actions) {
+                return actions.payment.execute()
+                    .then(function () {
+                        window.alert('Thank you for your purchase!');
+                    });
+            }
+        }, '#paypal-button');
+    </script>
     <div>
         <header id="header" class="skel-layers-fixed">
             <h2><a href="#">Sri Vaikuntapuramu Divya kshetram</a></h2>
@@ -50,7 +76,7 @@
                     <li>@Html.ActionLink("Events", "Events", "Home", new { area = "" }, null)</li>
                     <li>@Html.ActionLink("Services", "Charity", "Home", new { area = "" }, null)</li>
                     <li>@Html.ActionLink("Contact", "Contact", "Home", new { area = "" }, null)</li>
-                    <li><a href="#" class="button special">Donate</a></li>
+                    <li><a id="paypal-button" href="#" class="button special">Donate</a></li>
                 </ul>
             </nav>
         </header>
